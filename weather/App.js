@@ -69,7 +69,7 @@ export default function App() {
   } else if (errorMessage) {
     return (
       <View style={styles.container}>
-        <Text>{errorMessage}</Text>
+        <Text style={{ textAlign: "center" }}>{errorMessage}</Text>
         <StatusBar style="auto" />
       </View>
     );

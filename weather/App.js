@@ -8,36 +8,39 @@ import { colors } from "./utils/index";
 import ReloadIcon from "./components/ReloadIcon";
 import WeatherDetails from "./components/WeatherDetails";
 
+// API Key and Endpoint
 const WEATHER_API_KEY = "e50199458dc5a2419ab73ed5c193ef77";
 const BASE_WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?";
 
+// Functional Component
 export default function App() {
+  // Hooks to hold state variables.
   const [errorMessage, setErrorMessage] = useState(null);
   const [currentWeather, setCurrentWeather] = useState(null);
   const [unitsSystem, setUnitsSystem] = useState("metric");
 
+  // Run after render
   useEffect(() => {
     load();
   }, [unitsSystem]);
 
+  // Async function to fetch the data.
   async function load() {
+    // Setting state
     setCurrentWeather(null);
     setErrorMessage(null);
 
+    // Request for location permissions.
     try {
-      let { status } = await Location.requestBackgroundPermissionsAsync();
+      let { status } = await Location.requestForegroundPermissionsAsync();
       if (status != "granted") {
         setErrorMessage("Cannot Access the location");
         return;
       }
       const location = await Location.getCurrentPositionAsync();
-
       const { latitude, longitude } = location.coords;
-
       const weatherURL = `${BASE_WEATHER_URL}lat=${latitude}&lon=${longitude}&units=${unitsSystem}&appid=${WEATHER_API_KEY}`;
-
       const response = await fetch(weatherURL);
-
       const result = await response.json();
 
       if (response.ok) {
@@ -50,6 +53,7 @@ export default function App() {
     }
   }
 
+  // Render the Components
   if (currentWeather) {
     return (
       <View style={styles.container}>
@@ -83,6 +87,7 @@ export default function App() {
   }
 }
 
+// Styling Components
 const styles = StyleSheet.create({
   container: {
     flex: 1,
